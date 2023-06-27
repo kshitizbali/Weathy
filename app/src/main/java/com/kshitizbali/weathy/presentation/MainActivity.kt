@@ -1,6 +1,7 @@
 package com.kshitizbali.weathy.presentation
 
 import android.Manifest
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -17,6 +18,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import dagger.hilt.android.AndroidEntryPoint
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import androidx.compose.ui.unit.sp
+import com.kshitizbali.weathy.data.local.getLastLocation
+import com.kshitizbali.weathy.data.local.saveLastLocation
 
 
 import com.kshitizbali.weathy.presentation.ui.theme.DarkBlue
@@ -33,7 +44,22 @@ class MainActivity : ComponentActivity() {
         permissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
         ) {
-            viewModel.loadWeatherInfo()
+            if (viewModel.checkInternetAvailability(context = this)) {
+                if (!getLastLocation(this).isNullOrEmpty()) {
+                    viewModel.loadWeatherInfoByCity(city = getLastLocation(this)!!)
+                } else {
+                    viewModel.loadWeatherInfo()
+                }
+            } else {
+                viewModel.currentState = viewModel.currentState.copy(
+                    isLoading = false,
+                    error = "No internet connection available. Please check your internet connection ."
+                )
+                viewModel.state = viewModel.state.copy(
+                    isLoading = false,
+                    error = "No internet connection available. Please check your internet connection ."
+                )
+            }
         }
         permissionLauncher.launch(
             arrayOf(
@@ -69,6 +95,7 @@ class MainActivity : ComponentActivity() {
                             text = error,
                             color = Color.Red,
                             textAlign = TextAlign.Center,
+                            fontSize = 20.sp,
                             modifier = Modifier.align(Alignment.Center)
                         )
                     }
@@ -79,5 +106,30 @@ class MainActivity : ComponentActivity() {
 
     private fun getWeatherDataByCityRequest(cityName: String) {
         viewModel.loadWeatherInfoByCity(city = cityName)
+        saveLastLocation(context = this, value = cityName)
+    }
+
+    @Composable
+    fun CheckInternetConnectivity() {
+        val isConnected = remember { mutableStateOf(false) }
+        val context = LocalContext.current
+
+        val connectivityManager = context.getSystemService(
+            Context.CONNECTIVITY_SERVICE
+        ) as ConnectivityManager
+
+        val networkCapabilities = connectivityManager.activeNetwork ?: return
+
+        val activeNetwork =
+            connectivityManager.getNetworkCapabilities(networkCapabilities) ?: return
+
+        isConnected.value = when {
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+            else -> false
+        }
+
+        // Use the value of isConnected for further processing or UI rendering
     }
 }

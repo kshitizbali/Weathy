@@ -1,5 +1,8 @@
 package com.kshitizbali.weathy.presentation
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,8 +12,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.kshitizbali.weathy.domain.util.Resource
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 /**
  * ViewModel for the Weather screen.
@@ -21,11 +27,12 @@ class WeatherViewModel @Inject constructor(
     private val locationTracker: LocationTracker
 ) : ViewModel() {
 
-    var currentState by mutableStateOf(CurrentWeatherState())
-        private set
+     var currentState by mutableStateOf(CurrentWeatherState())
+        internal set
 
-    var state by mutableStateOf(WeatherState())
-        private set
+     var state by mutableStateOf(WeatherState())
+        internal set
+
 
     fun loadWeatherInfo() {
         viewModelScope.launch {
@@ -145,6 +152,30 @@ class WeatherViewModel @Inject constructor(
                     error = "Couldn't retrieve location. Make sure to grant permission and enable GPS."
                 )
             }
+        }
+    }
+
+    fun checkInternetAvailability(context: Context): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        val networkCapabilities =
+            connectivityManager.activeNetwork ?: return false
+
+        val activeNetwork =
+            connectivityManager.getNetworkCapabilities(networkCapabilities) ?: return false
+
+        return activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
+    }
+
+    fun checkInternetAvailabilityAsync(context: Context, onResult: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            val isConnected = withContext(Dispatchers.IO) {
+                checkInternetAvailability(context)
+            }
+            onResult(isConnected)
         }
     }
 }

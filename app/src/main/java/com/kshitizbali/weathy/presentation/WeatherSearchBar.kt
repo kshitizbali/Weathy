@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.kshitizbali.weathy.R
+import com.kshitizbali.weathy.data.local.saveLastLocation
 
 data class City(val city: String, val state: String)
 

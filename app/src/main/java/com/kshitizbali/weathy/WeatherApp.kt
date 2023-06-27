@@ -7,4 +7,4 @@ import dagger.hilt.android.HiltAndroidApp
  * Application class for the app.
  */
 @HiltAndroidApp
-class WeatherApp: Application()
+class WeathyApp: Application()
