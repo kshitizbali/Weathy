@@ -14,6 +14,9 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
+/**
+ * Converts the [WeatherCurrentDto] to [CurrentWeatherInfo]
+ */
 fun WeatherCurrentDto.toCurrentWeatherInfo(): CurrentWeatherInfo {
     return CurrentWeatherInfo(
         CurrentWeatherData(
@@ -30,6 +33,9 @@ fun WeatherCurrentDto.toCurrentWeatherInfo(): CurrentWeatherInfo {
     )
 }
 
+/**
+ * Converts the [WeatherMainDto] to [WeatherInfo] by filtering the forecast for tomorrow
+ */
 fun WeatherMainDto.toWeatherInfo(): WeatherInfo {
     val today = LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
     val filteredForecastByToday =  weatherData.filter { it.dateTime.startsWith(today) }
@@ -43,6 +49,9 @@ fun WeatherMainDto.toWeatherInfo(): WeatherInfo {
     )
 }
 
+/**
+ * Converts the [WeatherDataDto] to [WeatherData]
+ */
 private fun convertToWeatherData(index: Int, data: WeatherDataDto): WeatherData {
     val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
     val temperature = data.main.temperature
@@ -64,12 +73,18 @@ private fun convertToWeatherData(index: Int, data: WeatherDataDto): WeatherData 
     )
 }
 
+/**
+ * Gets the current date in yyyy-MM-dd format
+ */
 private fun getCurrentDate(): String {
     val currentDate = LocalDate.now()
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     return currentDate.format(formatter)
 }
 
+/**
+ * Extracts the date from the date time string
+ */
 private fun extractDateFromDateTime(dateTime: String): String {
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
     return LocalDateTime.parse(dateTime, formatter).toLocalDate().toString()

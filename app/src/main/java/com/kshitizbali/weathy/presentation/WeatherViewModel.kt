@@ -12,6 +12,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import com.kshitizbali.weathy.domain.util.Resource
 
+/**
+ * ViewModel for the Weather screen.
+ */
 @HiltViewModel
 class WeatherViewModel @Inject constructor(
     private val repository: WeatherRepository,

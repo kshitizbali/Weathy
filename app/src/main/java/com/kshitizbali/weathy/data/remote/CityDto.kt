@@ -2,6 +2,7 @@ package com.kshitizbali.weathy.data.remote
 
 import com.squareup.moshi.Json
 
+
 data class CityDto(
     @field:Json(name = "id")
     val id: Int,

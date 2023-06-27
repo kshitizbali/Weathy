@@ -14,6 +14,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 
+/**
+ * Display the weather data in a row.
+ */
 @Composable
 fun WeatherDataDisplay(
     value: Int,

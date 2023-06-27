@@ -10,6 +10,9 @@ import com.kshitizbali.weathy.domain.weather.CurrentWeatherInfo
 import com.kshitizbali.weathy.domain.weather.WeatherInfo
 import javax.inject.Inject
 
+/**
+ * WeatherRepositoryImpl is the implementation of [WeatherRepository] interface.
+ */
 class WeatherRepositoryImpl @Inject constructor(
     private val api: WeatherApi
 ) : WeatherRepository {

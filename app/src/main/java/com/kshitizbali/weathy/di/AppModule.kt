@@ -14,6 +14,9 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
 import javax.inject.Singleton
 
+/**
+ * Module that provides all dependencies injection for the app weather module.
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {

@@ -31,6 +31,10 @@ import com.kshitizbali.weathy.R
 
 data class City(val city: String, val state: String)
 
+/**
+ * Implements a search bar which parse the json file from raw folder and displays the list of cities
+ * matching the search text. onClickListener also implemented to handle the click on the city.
+ */
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun WeatherSearchBar(onCityClick: (String) -> Unit) {

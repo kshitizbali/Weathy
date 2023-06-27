@@ -9,6 +9,9 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Singleton
 
+/**
+ * Module that provides all dependency injection for the location module.
+ */
 @ExperimentalCoroutinesApi
 @Module
 @InstallIn(SingletonComponent::class)

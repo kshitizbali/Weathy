@@ -26,6 +26,9 @@ import com.kshitizbali.weathy.R
 import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
 
+/**
+ * Card to display the current weather information.
+ */
 @Composable
 fun WeatherCard(
     state: CurrentWeatherState,

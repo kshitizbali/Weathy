@@ -15,6 +15,10 @@ import javax.inject.Inject
 import kotlin.coroutines.resume
 
 @ExperimentalCoroutinesApi
+/**
+ * Default implementation of [LocationTracker] that uses [FusedLocationProviderClient] to get the
+ * current location.
+ */
 class DefaultLocationTracker @Inject constructor(
     private val locationClient: FusedLocationProviderClient,
     private val application: Application

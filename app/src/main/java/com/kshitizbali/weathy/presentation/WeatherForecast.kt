@@ -14,6 +14,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 
+/**
+ * Display the weather forecast for tomorrow.
+ */
 @Composable
 fun WeatherForecast(
     state: WeatherState,

@@ -4,6 +4,9 @@ import com.kshitizbali.weathy.domain.util.Resource
 import com.kshitizbali.weathy.domain.weather.CurrentWeatherInfo
 import com.kshitizbali.weathy.domain.weather.WeatherInfo
 
+/**
+ * WeatherRepository is the interface that provides the methods to fetch the weather data.
+ */
 interface WeatherRepository {
     suspend fun getWeatherData(lat: Double, long: Double): Resource<WeatherInfo>
 
